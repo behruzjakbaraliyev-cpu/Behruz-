@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teacher Login</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container" style="max-width: 420px; padding-top: 80px;">
+    <div class="card">
+      <h1>Teacher Login</h1>
+      <p class="meta">Enter your password to continue</p>
+
+      <% if (error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <form method="POST" action="/teacher/login">
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" required autofocus>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%">Login</button>
+      </form>
+
+      <p style="margin-top: 20px; text-align:center;">
+        <a href="/">← Back to home</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

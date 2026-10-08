@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= assignment.title %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="nav">
+    <strong>Submit Homework</strong>
+    <div>
+      <a href="/student/group/<%= group.id %>">← Back</a>
+      <a href="/">Home</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1><%= assignment.title %></h1>
+    <p class="meta">
+      Group: <%= group.name %> ·
+      Deadline: <strong><%= moment(assignment.deadline).format('DD MMM YYYY HH:mm') %></strong>
+      <% if (moment().isAfter(moment(assignment.deadline))) { %>
+        <span class="badge badge-yellow">Late submissions allowed</span>
+      <% } %>
+    </p>
+
+    <% if (assignment.description) { %>
+      <div class="card">
+        <h3>Instructions</h3>
+        <p><%= assignment.description %></p>
+      </div>
+    <% } %>
+
+    <% if (assignment.files && assignment.files.length) { %>
+      <div class="card">
+        <h3>Download materials</h3>
+        <% assignment.files.forEach(f => { %>
+          <div>
+            <a href="/download/assignment/<%= f.storedName %>" class="btn btn-sm btn-secondary"><%= f.originalName %></a>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <% if (error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+    <% if (success) { %>
+      <div class="alert alert-success"><%= success %></div>
+    <% } %>
+
+    <div class="card">
+      <h2>Upload your work</h2>
+      <form method="POST" action="/student/group/<%= group.id %>/assignment/<%= assignment.id %>/submit" enctype="multipart/form-data">
+        <div class="form-group">
+          <label>Select your name *</label>
+          <select name="studentName" required>
+            <option value="">— Choose your name —</option>
+            <% group.students.forEach(name => { %>
+              <option value="<%= name %>"><%= name %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Files (images, PDF, Word) — max 20 MB total *</label>
+          <input type="file" name="files" multiple required accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.txt">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Homework</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

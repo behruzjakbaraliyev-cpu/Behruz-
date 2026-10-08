@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teacher Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="nav">
+    <strong>Teacher Dashboard</strong>
+    <div>
+      <a href="/teacher/groups">Groups</a>
+      <a href="/teacher/assignments">Assignments</a>
+      <a href="/teacher/settings">Settings</a>
+      <a href="/teacher/logout">Logout</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>Welcome, Teacher</h1>
+    <p class="meta">Manage your groups and homework assignments</p>
+
+    <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:24px;">
+      <a href="/teacher/groups" class="card" style="flex:1; min-width:200px; text-align:center;">
+        <div style="font-size:2rem;">👥</div>
+        <h2><%= groups.length %></h2>
+        <p>Groups</p>
+      </a>
+      <a href="/teacher/assignments" class="card" style="flex:1; min-width:200px; text-align:center;">
+        <div style="font-size:2rem;">📝</div>
+        <h2><%= assignments.length %></h2>
+        <p>Assignments</p>
+      </a>
+    </div>
+
+    <div class="card" style="margin-top:24px;">
+      <h2>Quick actions</h2>
+      <a href="/teacher/groups" class="btn btn-primary">Manage Groups</a>
+      <a href="/teacher/assignments/new" class="btn btn-secondary" style="margin-left:8px;">New Assignment</a>
+    </div>
+  </div>
+</body>
+</html>

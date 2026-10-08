@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= group.name %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="nav">
+    <strong><%= group.name %></strong>
+    <div>
+      <a href="/student/group/<%= group.id %>/status">My Status</a>
+      <a href="/student">Change group</a>
+      <a href="/">Home</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1><%= group.name %></h1>
+
+    <div class="card">
+      <h2>Group members</h2>
+      <div class="student-list">
+        <% group.students.forEach(name => { %>
+          <span class="student-chip"><%= name %></span>
+        <% }) %>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Assignments</h2>
+      <% if (assignments.length === 0) { %>
+        <p class="meta">No assignments yet.</p>
+      <% } else { %>
+        <% assignments.forEach(a => {
+          const isPast = moment().isAfter(moment(a.deadline));
+        %>
+          <div style="border-bottom:1px solid #e2e8f0; padding:14px 0;">
+            <h3 style="margin-bottom:4px;">
+              <a href="/student/group/<%= group.id %>/assignment/<%= a.id %>"><%= a.title %></a>
+            </h3>
+            <p class="meta">
+              Deadline: <%= moment(a.deadline).format('DD MMM YYYY HH:mm') %>
+              <% if (isPast) { %>
+                <span class="badge badge-yellow">Deadline passed</span>
+              <% } %>
+            </p>
+            <a href="/student/group/<%= group.id %>/assignment/<%= a.id %>" class="btn btn-sm btn-primary">Open / Submit</a>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

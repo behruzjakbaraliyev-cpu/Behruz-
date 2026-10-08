@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Choose your group</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container" style="padding-top: 40px;">
+    <h1>Student Access</h1>
+    <p class="meta">Choose your group to continue</p>
+
+    <div class="card">
+      <% if (groups.length === 0) { %>
+        <p>No groups available yet. Ask your teacher.</p>
+      <% } else { %>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <% groups.forEach(g => { %>
+            <a href="/student/group/<%= g.id %>" class="btn btn-primary" style="text-align:left; padding:14px 18px;">
+              <%= g.name %>
+              <span style="float:right; opacity:0.7; font-size:0.85rem;"><%= g.students.length %> students</span>
+            </a>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <p style="text-align:center; margin-top:20px;">
+      <a href="/">← Back to home</a>
+    </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Status – <%= group.name %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="nav">
+    <strong>My Status</strong>
+    <div>
+      <a href="/student/group/<%= group.id %>">← Assignments</a>
+      <a href="/">Home</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>Submission Status</h1>
+    <p class="meta">Group: <%= group.name %></p>
+
+    <div class="card">
+      <p class="meta" style="margin-bottom:12px;">
+        <span class="badge badge-red">Not submitted</span>
+        <span class="badge badge-green">On time</span>
+        <span class="badge badge-yellow">Late</span>
+        <span class="badge badge-checked">Checked ✅</span>
+      </p>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Assignment</th>
+            <th>Your name</th>
+            <th>Status</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% assignments.forEach(a => {
+            const related = submissions.filter(s => s.assignmentId === a.id);
+          %>
+            <% if (related.length === 0) { %>
+              <tr>
+                <td><%= a.title %></td>
+                <td colspan="3"><span class="badge badge-red">No submissions yet from group</span></td>
+              </tr>
+            <% } else {
+              related.forEach(sub => {
+                let badge = 'badge-green';
+                let label = 'On time';
+                if (sub.checked) { badge = 'badge-checked'; label = 'Checked ✅'; }
+                else if (sub.isLate) { badge = 'badge-yellow'; label = 'Late'; }
+            %>
+              <tr>
+                <td><%= a.title %></td>
+                <td><%= sub.studentName %></td>
+                <td><span class="badge <%= badge %>"><%= label %></span></td>
+                <td><%= moment(sub.submittedAt).format('DD MMM HH:mm') %></td>
+              </tr>
+            <% }) } %>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

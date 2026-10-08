@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= assignment.title %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="nav">
+    <strong><%= assignment.title %></strong>
+    <div>
+      <a href="/teacher/assignments">← Assignments</a>
+      <a href="/teacher/logout">Logout</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1><%= assignment.title %></h1>
+    <p class="meta">
+      Group: <strong><%= group ? group.name : '?' %></strong> ·
+      Deadline: <strong><%= moment(assignment.deadline).format('DD MMM YYYY HH:mm') %></strong>
+    </p>
+
+    <% if (assignment.description) { %>
+      <div class="card">
+        <h3>Description</h3>
+        <p><%= assignment.description %></p>
+      </div>
+    <% } %>
+
+    <% if (assignment.files && assignment.files.length) { %>
+      <div class="card">
+        <h3>Materials for students</h3>
+        <% assignment.files.forEach(f => { %>
+          <div>
+            <a href="/download/assignment/<%= f.storedName %>"><%= f.originalName %></a>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <div class="card">
+      <h2>Submissions (<%= studentStatus.filter(s => s.submission).length %> / <%= studentStatus.length %>)</h2>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Status</th>
+            <th>Submitted at</th>
+            <th>Files</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% studentStatus.forEach(row => {
+            const sub = row.submission;
+            let badge = 'badge-red';
+            let label = 'Not submitted';
+            if (sub) {
+              if (sub.checked) {
+                badge = 'badge-checked';
+                label = 'Checked ✅';
+              } else if (sub.isLate) {
+                badge = 'badge-yellow';
+                label = 'Late';
+              } else {
+                badge = 'badge-green';
+                label = 'On time';
+              }
+            }
+          %>
+            <tr>
+              <td><%= row.name %></td>
+              <td><span class="badge <%= badge %>"><%= label %></span></td>
+              <td>
+                <% if (sub) { %>
+                  <%= moment(sub.submittedAt).format('DD MMM HH:mm') %>
+                <% } else { %>—<% } %>
+              </td>
+              <td>
+                <% if (sub && sub.files) { %>
+                  <% sub.files.forEach(f => { %>
+                    <div><a href="/download/submission/<%= f.storedName %>"><%= f.originalName %></a></div>
+                  <% }) %>
+                <% } else { %>—<% } %>
+              </td>
+              <td>
+                <% if (sub) { %>
+                  <% if (!sub.checked) { %>
+                    <form method="POST" action="/teacher/submissions/<%= sub.id %>/check" style="display:inline;">
+                      <button type="submit" class="btn btn-sm btn-success">Mark Checked</button>
+                    </form>
+                  <% } else { %>
+                    <form method="POST" action="/teacher/submissions/<%= sub.id %>/uncheck" style="display:inline;">
+                      <button type="submit" class="btn btn-sm btn-secondary">Uncheck</button>
+                    </form>
+                  <% } %>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <form method="POST" action="/teacher/assignments/<%= assignment.id %>/delete" onsubmit="return confirm('Delete this assignment and all submissions?');">
+      <button type="submit" class="btn btn-danger">Delete Assignment</button>
+    </form>
+  </div>
+</body>
+</html>

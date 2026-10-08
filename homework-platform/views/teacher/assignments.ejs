@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assignments</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="nav">
+    <strong>Assignments</strong>
+    <div>
+      <a href="/teacher">Dashboard</a>
+      <a href="/teacher/groups">Groups</a>
+      <a href="/teacher/assignments/new">+ New</a>
+      <a href="/teacher/logout">Logout</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <h1>Assignments</h1>
+      <a href="/teacher/assignments/new" class="btn btn-primary">+ New Assignment</a>
+    </div>
+
+    <div class="card">
+      <% if (assignments.length === 0) { %>
+        <p class="meta">No assignments yet.</p>
+      <% } else { %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Group</th>
+              <th>Deadline</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% assignments.forEach(a => {
+              const g = groups.find(x => x.id === a.groupId);
+            %>
+              <tr>
+                <td><strong><%= a.title %></strong></td>
+                <td><%= g ? g.name : '?' %></td>
+                <td><%= moment(a.deadline).format('DD MMM YYYY HH:mm') %></td>
+                <td>
+                  <a href="/teacher/assignments/<%= a.id %>" class="btn btn-sm btn-secondary">Open</a>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>
